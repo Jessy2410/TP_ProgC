@@ -1,27 +1,24 @@
-// boucles.c - version avec for
+// conditions.c
 
 #include <stdio.h>
 
 int main() {
-    int compteur = 5;
+    int somme = 0;
 
-    if (compteur >= 10) {
-        printf("La valeur du compteur doit être strictement inférieure à 10.\n");
-        return 1;
-    }
-
-    for (int i = 1; i <= compteur; i++) {
-        for (int j = 1; j <= i; j++) {
-            // Condition d'affichage : première et dernière ligne -> *
-            // les autres : * suivi de # jusqu'à l'avant-dernier caractère, puis *
-            if (i == 1 || i == compteur || j == 1 || j == i) {
-                printf("* ");
-            } else {
-                printf("# ");
-            }
+    for (int i = 1; i <= 1000; i++) {
+        if (i % 11 == 0) {
+            continue; // on ignore les multiples de 11
         }
-        printf("\n");
+
+        if (i % 5 == 0 || i % 7 == 0) {
+            somme += i;
+        }
+
+        if (somme > 5000) {
+            break; // on arrête la boucle si la somme dépasse 5000
+        }
     }
 
+    printf("Somme finale : %d\n", somme);
     return 0;
 }
