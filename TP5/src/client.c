@@ -2,7 +2,6 @@
  * SPDX-FileCopyrightText: 2021 John Samuel
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
- *
  */
 
 #include <string.h>
@@ -12,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>  // <-- ajouté pour inet_addr
 
 #include "client.h"
 
@@ -37,7 +37,7 @@ int envoie_recois_message(int socketfd)
   strcpy(data, "message: ");
   strcat(data, message);
 
-  // Envoie le message au client
+  // Envoie le message au serveur
   int write_status = write(socketfd, data, strlen(data));
   if (write_status < 0)
   {
@@ -56,7 +56,7 @@ int envoie_recois_message(int socketfd)
     return -1;
   }
 
-  // Affiche le message reçu du client
+  // Affiche le message reçu du serveur
   printf("Message reçu: %s\n", data);
 
   return 0; // Succès
@@ -65,11 +65,10 @@ int envoie_recois_message(int socketfd)
 int main()
 {
   int socketfd;
-
   struct sockaddr_in server_addr;
 
   /*
-   * Creation d'une socket
+   * Création d'une socket
    */
   socketfd = socket(AF_INET, SOCK_STREAM, 0);
   if (socketfd < 0)
@@ -81,10 +80,10 @@ int main()
   // détails du serveur (adresse et port)
   memset(&server_addr, 0, sizeof(server_addr));
   server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(PORT);
-  server_addr.sin_addr.s_addr = INADDR_ANY;
+  server_addr.sin_port = htons(PORT); // défini dans client.h
+  server_addr.sin_addr.s_addr = inet_addr("10.0.47.4"); // <-- IP du serveur (node1)
 
-  // demande de connection au serveur
+  // Demande de connexion au serveur
   int connect_status = connect(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (connect_status < 0)
   {
@@ -94,7 +93,7 @@ int main()
 
   while (1)
   {
-    // appeler la fonction pour envoyer un message au serveur
+    // Appel de la fonction pour envoyer un message au serveur
     envoie_recois_message(socketfd);
   }
 
