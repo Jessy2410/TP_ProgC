@@ -21,7 +21,7 @@ int main() {
     // Configurer l'adresse du serveur
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
-    inet_pton(AF_INET, "10.0.47.4", &serv_addr.sin_addr); // IP du serveur
+    inet_pton(AF_INET, "10.0.47.7", &serv_addr.sin_addr); // IP du serveur
 
     // Connexion
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
